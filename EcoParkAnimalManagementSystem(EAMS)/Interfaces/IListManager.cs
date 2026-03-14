@@ -38,5 +38,22 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Interfaces
 
         // Returns a list containing the ToString() representation of all items in the list.
         List<string> ToStringList();
+
+        // Saves the list to a plain text file at the specified path.
+        bool SaveToTextFile(string fileName);
+
+        // Loads the list from a plain text file at the specified path.
+        bool LoadFromTextFile(string fileName);
+
+        // Serializes the list to a JSON file at the specified path.
+        bool JsonSerialize(string fileName);
+
+        // Deserializes the list from a JSON file at the specified path.
+        bool JsonDeserialize(string fileName);
+
+        // Serializes the list to an XML file at the specified path.
+        bool XmlSerialize(string fileName);
+
+
     }
 }
