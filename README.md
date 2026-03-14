@@ -1,4 +1,4 @@
-# EcoPark Animal Management System V1
+# EcoPark Animal Management System V3
 
 A Windows Forms application demonstrating Object-Oriented Programming in C# as part of "Programming in C# II" course Assignment requirement.
 
