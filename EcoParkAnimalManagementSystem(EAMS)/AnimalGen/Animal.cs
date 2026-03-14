@@ -9,10 +9,11 @@ using System.Xml.Linq;
 
 namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
 {
-    // Abstract base class for all animals in the EcoPark system.
+    // Í removed abstract base class for all animals in the EcoPark system.
+    //so JsonSerializer can instantiate this class directly.
 
 
-    public abstract class Animal: IAnimal
+    public class Animal: IAnimal
     {
 
         // Backing fields  for only properties that needs validation
@@ -87,11 +88,22 @@ namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
             sleepTimeHours = 0;
         }
 
-        public abstract int GetAverageLifeSpan();
+        //was abstract, now virtual with empty body so deserializer can call it.
+        public virtual int GetAverageLifeSpan()
+        {
+            return 0;
+        }
 
-        public abstract Dictionary<string, string> DailyFoodRequirement();
+        //was abstract, now virtual with empty body.
+        public virtual Dictionary<string, string> DailyFoodRequirement()
+        {
+            return new Dictionary<string, string>();
+        }
 
-        public abstract Queue<string> GetUpcomingEvents();
+        public virtual Queue<string> GetUpcomingEvents()
+        {
+            return new Queue<string>();
+        }
 
         public virtual string ToStringSummary()
         {

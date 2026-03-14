@@ -1,4 +1,6 @@
 ﻿using EcoParkAnimalManagementSystem_EAMS_.AnimalGen;
+using EcoParkAnimalManagementSystem_EAMS_.Exceptions;
+using EcoParkAnimalManagementSystem_EAMS_.Interfaces;
 using EcoParkAnimalManagementSystem_EAMS_.Mammals;
 using EcoParkAnimalManagementSystem_EAMS_.Mammals.Species;
 using EcoParkAnimalManagementSystem_EAMS_.Reptiles;
@@ -6,8 +8,11 @@ using EcoParkAnimalManagementSystem_EAMS_.Reptiles.Species;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text.Json;
 
 namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
 {
@@ -124,9 +129,235 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
             sb.AppendLine($"{label,-16} {value}");
         }
 
+        // Writes every animal to a plain text file — one animal per block, fields on separate lines.
+        // try-finally ensures the writer closes.
+        //public override bool SaveToTextFile(string fileName)
+        //{
+        //    StreamWriter writer = null;
+        //    try
+        //    {
+        //        writer = new StreamWriter(fileName);
+        //        for (int i = 0; i < Count; i++)
+        //        {
+        //            Animal animal = GetAt(i);
+        //            // General fields 
+        //            writer.WriteLine(animal.Id);
+        //            writer.WriteLine(animal.Name);
+        //            writer.WriteLine(animal.Age);
+        //            writer.WriteLine(animal.Weight);
+        //            writer.WriteLine(animal.Gender);
+        //            writer.WriteLine(animal.Category);
+
+        //            // Category-specific fields 
+        //            if (animal is Mammal mammal)
+        //            {
+        //                writer.WriteLine(mammal.NumberOfTeeth);
+        //                writer.WriteLine(mammal.TailLength);
+        //            }
+        //            else if (animal is Reptile reptile)
+        //            {
+        //                writer.WriteLine(reptile.BodyLength);
+        //                writer.WriteLine(reptile.LivesInWater);
+        //                writer.WriteLine(reptile.AggressivenessLevel);
+        //            }
+
+        //            // Species-specific fields 
+        //            if (animal is Dog dog)
+        //            {
+        //                writer.WriteLine(dog.Breed);
+        //                writer.WriteLine(dog.IsTrained);
+        //            }
+        //            else if (animal is Snake snake)
+        //            {
+        //                writer.WriteLine(snake.IsVenomous);
+        //                writer.WriteLine(snake.Speed);
+        //            }
+
+        //            // Blank line separates each animal block.
+        //            writer.WriteLine();
+        //        }
+        //        return true;
+        //    }
+        //    finally
+        //    {
+        //        writer?.Close();
+        //    }
+        //}
+
+        // Reconstructs the animal list from a plain text file written by SaveToTextFile.
+        public override bool LoadFromTextFile(string fileName)
+        {
+            using (StreamReader reader = new StreamReader(fileName))
+            {
+                try
+                {
+                    DeleteAll();
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        // Skip blank separator lines between animal blocks.
+                        if (string.IsNullOrWhiteSpace(line))
+                            continue;
+
+                        // Read general fields — same order as SaveToTextFile.
+                        string id = line;
+                        string name = reader.ReadLine();
+                        int age = int.Parse(reader.ReadLine());
+                        double weight = double.Parse(reader.ReadLine());
+                        GenderType gender = (GenderType)Enum.Parse(typeof(GenderType), reader.ReadLine());
+                        CategoryType category = (CategoryType)Enum.Parse(typeof(CategoryType), reader.ReadLine());
+
+                        Animal animal = null;
+
+                        // Reconstruct the correct concrete type from the saved category.
+                        if (category == CategoryType.Mammal)
+                        {
+                            int numberOfTeeth = int.Parse(reader.ReadLine());
+                            double tailLength = double.Parse(reader.ReadLine());
+
+                            // Default to Dog for mammals 
+                            Dog dog = new Dog(numberOfTeeth, tailLength);
+                            dog.Breed = reader.ReadLine();
+                            dog.IsTrained = bool.Parse(reader.ReadLine());
+                            animal = dog;
+                        }
+                        else if (category == CategoryType.Reptile)
+                        {
+                            double bodyLength = double.Parse(reader.ReadLine());
+                            bool livesInWater = bool.Parse(reader.ReadLine());
+                            int aggressivenessLevel = int.Parse(reader.ReadLine());
+
+                            Snake snake = new Snake(bodyLength, livesInWater, aggressivenessLevel);
+                            snake.IsVenomous = bool.Parse(reader.ReadLine());
+                            snake.Speed = double.Parse(reader.ReadLine());
+                            animal = snake;
+                        }
+
+                        if (animal != null)
+                        {
+                            animal.Id = id;
+                            animal.Name = name;
+                            animal.Age = age;
+                            animal.Weight = weight;
+                            animal.Gender = gender;
+                            Add(animal);
+                        }
+                    }
+                    return true;
+                }
+                catch (IOException)
+                {
+                    
+                    throw;
+                }
+            }
+        }
+
+
+
+        // Returns all animals sorted alphabetically by name.
+        public IEnumerable<Animal> GetSortedByName()
+        {
+            return from animal in GetAllAnimals()
+                   orderby animal.Name
+                   select animal;
+        }
+
+        // Returns all animals sorted by age, youngest first.
+        public IEnumerable<Animal> GetSortedByAge()
+        {
+            return from animal in GetAllAnimals()
+                   orderby animal.Age
+                   select animal;
+        }
+
+        // Returns the total number of animals in the system.
+        public int GetTotalCount()
+        {
+            return (from animal in GetAllAnimals()
+                    select animal).Count();
+        }
+
+        // Returns the average age across all animals, or 0 if the list is empty.
+        public double GetAverageAge()
+        {
+            if (Count == 0) return 0;
+
+            return (from animal in GetAllAnimals()
+                    select animal.Age).Average();
+        }
+
+
+
+        // Returns all animals belonging to the specified category.
+        public IEnumerable<Animal> GetByCategory(CategoryType category)
+        {
+            return from animal in GetAllAnimals()
+                   where animal.Category == category
+                   orderby animal.Name
+                   select animal;
+        }
+
+        // Returns all animals whose age falls within the given range (inclusive).
+        public IEnumerable<Animal> GetByAgeRange(int minAge, int maxAge)
+        {
+            return from animal in GetAllAnimals()
+                   where animal.Age >= minAge && animal.Age <= maxAge
+                   orderby animal.Age
+                   select animal;
+        }
+
+       
+
+        // Finds the first animal matching the given name (case-insensitive), or null.
+        public Animal SearchByName(string name)
+        {
+            return (from animal in GetAllAnimals()
+                    where animal.Name.Equals(name, StringComparison.OrdinalIgnoreCase)
+                    select animal).FirstOrDefault();
+        }
+
+        // Finds the first animal matching the given ID, or null.
+        public Animal SearchById(string id)
+        {
+            return (from animal in GetAllAnimals()
+                    where animal.Id.Equals(id, StringComparison.OrdinalIgnoreCase)
+                    select animal).FirstOrDefault();
+        }
+
+      
+
+        // Scans for duplicate animals (same name + same category) before serialization.
+        public void ValidateNoDuplicates()
+        {
+            IEnumerable<Animal> duplicates =
+                from animal in GetAllAnimals()
+                group animal by new { animal.Name, animal.Category } into grp
+                where grp.Count() > 1
+                select grp.First();
+
+            Animal first = duplicates.FirstOrDefault();
+            if (first != null)
+            {
+                throw new AnimalValidationException(
+                    "Duplicate animal detected — save aborted.",
+                    first.Name,
+                    first.Category.ToString()
+                );
+            }
+        }
+
+
+        // Returns all animals as an IEnumerable for LINQ queries.
+        private IEnumerable<Animal> GetAllAnimals()
+        {
+            return from i in Enumerable.Range(0, Count)
+                   select GetAt(i);
+        }
     }
-
-
-
 }
+
+
+
+
 

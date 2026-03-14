@@ -30,8 +30,14 @@
         {
             txtAnimalDetails = new TextBox();
             menuStrip = new MenuStrip();
+            toolStripMenuItem3 = new ToolStripMenuItem();
+            toolStripMenuItem4 = new ToolStripMenuItem();
             fileToolStripMenuItem = new ToolStripMenuItem();
             exitToolStripMenuItem1 = new ToolStripMenuItem();
+            mnuFileNew = new ToolStripMenuItem();
+            mnuFileSave = new ToolStripMenuItem();
+            mnuFileOpen = new ToolStripMenuItem();
+            mnuFileSaveAs = new ToolStripMenuItem();
             helpToolStripMenuItem1 = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
             grpCreateAnimal = new GroupBox();
@@ -54,10 +60,26 @@
             lstAnimals = new ListBox();
             btnDelete = new Button();
             btnChange = new Button();
+            lstQueryResults = new ListBox();
+            groupBox1 = new GroupBox();
+            btnSearch = new Button();
+            txtSearch = new TextBox();
+            btnFilterAge = new Button();
+            nudMaxAge = new NumericUpDown();
+            nudMinAge = new NumericUpDown();
+            btnFilterCategory = new Button();
+            cmbCategory = new ComboBox();
+            btnSortByAge = new Button();
+            btnSortByName = new Button();
+            lblAverageAge = new Label();
+            label1 = new Label();
             menuStrip.SuspendLayout();
             grpCreateAnimal.SuspendLayout();
             grpGeneralData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)picAnimal).BeginInit();
+            groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)nudMaxAge).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)nudMinAge).BeginInit();
             SuspendLayout();
             // 
             // txtAnimalDetails
@@ -76,16 +98,26 @@
             // menuStrip
             // 
             menuStrip.ImageScalingSize = new Size(20, 20);
-            menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, helpToolStripMenuItem1 });
+            menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem3, toolStripMenuItem4, fileToolStripMenuItem, helpToolStripMenuItem1 });
             menuStrip.Location = new Point(0, 0);
             menuStrip.Name = "menuStrip";
-            menuStrip.Size = new Size(1092, 28);
+            menuStrip.Size = new Size(1520, 28);
             menuStrip.TabIndex = 0;
             menuStrip.Text = "menuStrip1";
             // 
+            // toolStripMenuItem3
+            // 
+            toolStripMenuItem3.Name = "toolStripMenuItem3";
+            toolStripMenuItem3.Size = new Size(14, 24);
+            // 
+            // toolStripMenuItem4
+            // 
+            toolStripMenuItem4.Name = "toolStripMenuItem4";
+            toolStripMenuItem4.Size = new Size(14, 24);
+            // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem1 });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem1, mnuFileNew, mnuFileSave, mnuFileOpen, mnuFileSaveAs });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "File";
@@ -93,9 +125,37 @@
             // exitToolStripMenuItem1
             // 
             exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-            exitToolStripMenuItem1.Size = new Size(116, 26);
+            exitToolStripMenuItem1.Size = new Size(224, 26);
             exitToolStripMenuItem1.Text = "Exit";
             exitToolStripMenuItem1.Click += exitToolStripMenuItem1_Click;
+            // 
+            // mnuFileNew
+            // 
+            mnuFileNew.Name = "mnuFileNew";
+            mnuFileNew.Size = new Size(224, 26);
+            mnuFileNew.Text = "New";
+            mnuFileNew.Click += mnuFileNew_Click;
+            // 
+            // mnuFileSave
+            // 
+            mnuFileSave.Name = "mnuFileSave";
+            mnuFileSave.Size = new Size(224, 26);
+            mnuFileSave.Text = "Save";
+            mnuFileSave.Click += mnuFileSave_Click;
+            // 
+            // mnuFileOpen
+            // 
+            mnuFileOpen.Name = "mnuFileOpen";
+            mnuFileOpen.Size = new Size(224, 26);
+            mnuFileOpen.Text = "Open";
+            mnuFileOpen.Click += mnuFileOpen_Click;
+            // 
+            // mnuFileSaveAs
+            // 
+            mnuFileSaveAs.Name = "mnuFileSaveAs";
+            mnuFileSaveAs.Size = new Size(224, 26);
+            mnuFileSaveAs.Text = "Save As";
+            mnuFileSaveAs.Click += mnuFileSaveAs_Click;
             // 
             // helpToolStripMenuItem1
             // 
@@ -308,12 +368,142 @@
             btnChange.UseVisualStyleBackColor = true;
             btnChange.Click += btnChange_Click;
             // 
+            // lstQueryResults
+            // 
+            lstQueryResults.FormattingEnabled = true;
+            lstQueryResults.Location = new Point(19, 400);
+            lstQueryResults.Name = "lstQueryResults";
+            lstQueryResults.Size = new Size(326, 404);
+            lstQueryResults.TabIndex = 9;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(btnSearch);
+            groupBox1.Controls.Add(lstQueryResults);
+            groupBox1.Controls.Add(txtSearch);
+            groupBox1.Controls.Add(btnFilterAge);
+            groupBox1.Controls.Add(nudMaxAge);
+            groupBox1.Controls.Add(nudMinAge);
+            groupBox1.Controls.Add(btnFilterCategory);
+            groupBox1.Controls.Add(cmbCategory);
+            groupBox1.Controls.Add(btnSortByAge);
+            groupBox1.Controls.Add(btnSortByName);
+            groupBox1.Controls.Add(lblAverageAge);
+            groupBox1.Controls.Add(label1);
+            groupBox1.Location = new Point(1067, 35);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(408, 810);
+            groupBox1.TabIndex = 10;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Query and Search";
+            // 
+            // btnSearch
+            // 
+            btnSearch.Location = new Point(195, 294);
+            btnSearch.Name = "btnSearch";
+            btnSearch.Size = new Size(122, 29);
+            btnSearch.TabIndex = 10;
+            btnSearch.Text = "Search Row";
+            btnSearch.UseVisualStyleBackColor = true;
+            btnSearch.Click += btnSearch_Click;
+            // 
+            // txtSearch
+            // 
+            txtSearch.Location = new Point(51, 294);
+            txtSearch.Name = "txtSearch";
+            txtSearch.Size = new Size(125, 27);
+            txtSearch.TabIndex = 9;
+            // 
+            // btnFilterAge
+            // 
+            btnFilterAge.Location = new Point(239, 219);
+            btnFilterAge.Name = "btnFilterAge";
+            btnFilterAge.Size = new Size(169, 29);
+            btnFilterAge.TabIndex = 8;
+            btnFilterAge.Text = "Filter Age Range";
+            btnFilterAge.UseVisualStyleBackColor = true;
+            btnFilterAge.Click += btnFilterAge_Click;
+            // 
+            // nudMaxAge
+            // 
+            nudMaxAge.Location = new Point(133, 221);
+            nudMaxAge.MaximumSize = new Size(100, 0);
+            nudMaxAge.Name = "nudMaxAge";
+            nudMaxAge.Size = new Size(100, 27);
+            nudMaxAge.TabIndex = 7;
+            // 
+            // nudMinAge
+            // 
+            nudMinAge.Location = new Point(19, 221);
+            nudMinAge.MaximumSize = new Size(100, 0);
+            nudMinAge.Name = "nudMinAge";
+            nudMinAge.Size = new Size(100, 27);
+            nudMinAge.TabIndex = 6;
+            // 
+            // btnFilterCategory
+            // 
+            btnFilterCategory.Location = new Point(195, 145);
+            btnFilterCategory.Name = "btnFilterCategory";
+            btnFilterCategory.Size = new Size(190, 29);
+            btnFilterCategory.TabIndex = 5;
+            btnFilterCategory.Text = "Filter Category";
+            btnFilterCategory.UseVisualStyleBackColor = true;
+            btnFilterCategory.Click += btnFilterCategory_Click;
+            // 
+            // cmbCategory
+            // 
+            cmbCategory.FormattingEnabled = true;
+            cmbCategory.Location = new Point(19, 145);
+            cmbCategory.Name = "cmbCategory";
+            cmbCategory.Size = new Size(151, 28);
+            cmbCategory.TabIndex = 4;
+            // 
+            // btnSortByAge
+            // 
+            btnSortByAge.Location = new Point(223, 82);
+            btnSortByAge.Name = "btnSortByAge";
+            btnSortByAge.Size = new Size(162, 29);
+            btnSortByAge.TabIndex = 3;
+            btnSortByAge.Text = "Sort by Age";
+            btnSortByAge.UseVisualStyleBackColor = true;
+            btnSortByAge.TextChanged += btnSortByAge_Clicked;
+            btnSortByAge.Click += btnSortByAge_Click;
+            // 
+            // btnSortByName
+            // 
+            btnSortByName.Location = new Point(19, 82);
+            btnSortByName.Name = "btnSortByName";
+            btnSortByName.Size = new Size(165, 29);
+            btnSortByName.TabIndex = 2;
+            btnSortByName.Text = "Sort by Name";
+            btnSortByName.UseVisualStyleBackColor = true;
+            btnSortByName.Click += btnSortByName_Click;
+            // 
+            // lblAverageAge
+            // 
+            lblAverageAge.AutoSize = true;
+            lblAverageAge.Location = new Point(133, 47);
+            lblAverageAge.Name = "lblAverageAge";
+            lblAverageAge.Size = new Size(112, 20);
+            lblAverageAge.TabIndex = 1;
+            lblAverageAge.Text = "Avg age: 0.0 yrs";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(33, 47);
+            label1.Name = "label1";
+            label1.Size = new Size(57, 20);
+            label1.TabIndex = 0;
+            label1.Text = "Total: 0";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(1092, 774);
+            ClientSize = new Size(1520, 896);
+            Controls.Add(groupBox1);
             Controls.Add(txtAnimalDetails);
             Controls.Add(btnChange);
             Controls.Add(btnDelete);
@@ -336,6 +526,10 @@
             grpGeneralData.ResumeLayout(false);
             grpGeneralData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)picAnimal).EndInit();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)nudMaxAge).EndInit();
+            ((System.ComponentModel.ISupportInitialize)nudMinAge).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -368,5 +562,24 @@
         private Button btnDelete;
         private Button btnChange;
         private TextBox txtAnimalDetails;
+        private ListBox lstQueryResults;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem toolStripMenuItem4;
+        private ToolStripMenuItem mnuFileNew;
+        private ToolStripMenuItem mnuFileSave;
+        private ToolStripMenuItem mnuFileOpen;
+        private ToolStripMenuItem mnuFileSaveAs;
+        private GroupBox groupBox1;
+        private Label label1;
+        private Button btnSortByAge;
+        private Button btnSortByName;
+        private Label lblAverageAge;
+        private ComboBox cmbCategory;
+        private Button btnFilterCategory;
+        private NumericUpDown nudMinAge;
+        private NumericUpDown nudMaxAge;
+        private Button btnFilterAge;
+        private Button btnSearch;
+        private TextBox txtSearch;
     }
 }

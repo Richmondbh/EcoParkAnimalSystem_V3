@@ -1,4 +1,5 @@
-using EcoParkAnimalManagementSystem_EAMS_.AnimalGen;
+﻿using EcoParkAnimalManagementSystem_EAMS_.AnimalGen;
+using EcoParkAnimalManagementSystem_EAMS_.Exceptions;
 using EcoParkAnimalManagementSystem_EAMS_.Infrastructure;
 using EcoParkAnimalManagementSystem_EAMS_.Mammals;
 using EcoParkAnimalManagementSystem_EAMS_.Reptiles;
@@ -527,7 +528,59 @@ namespace EcoParkAnimalManagementSystem_EAMS_
 
         private void txtAnimalDetails_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
+
+        private void btnSortByAge_Clicked(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSortByName_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFilterCategory_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnFilterAge_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSortByAge_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuFileNew_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuFileSave_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuFileOpen_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuFileSaveAs_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
     }
 }
