@@ -52,7 +52,7 @@ This version extends Version 2 with data persistence, exception handling, and LI
 
 ## Technologies
 
-- C# / .NET 8
+- C# / .NET 9
 - Windows Forms
 - System.Text.Json
 - System.Xml.Serialization
