@@ -1,0 +1,69 @@
+﻿[
+  {
+    "Id": "M1",
+    "Name": "Simba",
+    "Age": 4,
+    "Weight": 190.5,
+    "Gender": 1,
+    "Category": 1,
+    "ImagePath": "",
+    "NumberOfTeeth": 30,
+    "TailLength": 0.8,
+    "Breed": "Labrador",
+    "IsTrained": true
+  },
+  {
+    "Id": "M2",
+    "Name": "Bellaq",
+    "Age": 2,
+    "Weight": 160.0,
+    "Gender": 2,
+    "Category": 1,
+    "ImagePath": "",
+    "NumberOfTeeth": 28,
+    "TailLength": 0.6,
+    "Breed": "Poodle",
+    "IsTrained": false
+  },
+  {
+    "Id": "R1",
+    "Name": "Rex",
+    "Age": 7,
+    "Weight": 0.0,
+    "Gender": 1,
+    "Category": 2,
+    "ImagePath": "",
+    "BodyLength": 1.8,
+    "LivesInWater": false,
+    "AggressivenessLevel": 6,
+    "IsVenomous": false,
+    "Speed": 12.5
+  },
+  {
+    "Id": "R2",
+    "Name": "Naja",
+    "Age": 3,
+    "Weight": 0.0,
+    "Gender": 2,
+    "Category": 2,
+    "ImagePath": "",
+    "BodyLength": 1.2,
+    "LivesInWater": true,
+    "AggressivenessLevel": 8,
+    "IsVenomous": true,
+    "Speed": 9.0
+  },
+  {
+    "Id": "M3",
+    "Name": "Popo",
+    "Age": 5,
+    "Weight": 200.0,
+    "Gender": 1,
+    "Category": 1,
+    "ImagePath": "",
+    "NumberOfTeeth": 32,
+    "TailLength": 0.9,
+    "Breed": "GermanShepherd",
+    "IsTrained": true
+  }
+]

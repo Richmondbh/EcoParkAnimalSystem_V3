@@ -32,6 +32,8 @@ namespace EcoParkAnimalManagementSystem_EAMS_
         private void InitializeGUI()
         {
             animalManager = new AnimalManager();
+
+            animalManager.SeedTestData(); // To be removed before submission @Farid
             // Populate category list
             lstCategory.Items.Clear();
             foreach (CategoryType category in Enum.GetValues(typeof(CategoryType)))

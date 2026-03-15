@@ -118,7 +118,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
         }
 
         // Writes each item as a line in a plain text file.
-        public bool SaveToTextFile(string fileName)
+        public virtual bool SaveToTextFile(string fileName)
         {
             StreamWriter writer = null;
             try

@@ -129,60 +129,60 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
             sb.AppendLine($"{label,-16} {value}");
         }
 
-        // Writes every animal to a plain text file — one animal per block, fields on separate lines.
-        // try-finally ensures the writer closes.
-        //public override bool SaveToTextFile(string fileName)
-        //{
-        //    StreamWriter writer = null;
-        //    try
-        //    {
-        //        writer = new StreamWriter(fileName);
-        //        for (int i = 0; i < Count; i++)
-        //        {
-        //            Animal animal = GetAt(i);
-        //            // General fields 
-        //            writer.WriteLine(animal.Id);
-        //            writer.WriteLine(animal.Name);
-        //            writer.WriteLine(animal.Age);
-        //            writer.WriteLine(animal.Weight);
-        //            writer.WriteLine(animal.Gender);
-        //            writer.WriteLine(animal.Category);
+       // Writes every animal to a plain text file — one animal per block, fields on separate lines.
+         //try-finally ensures the writer closes.
+        public override bool SaveToTextFile(string fileName)
+        {
+            StreamWriter writer = null;
+            try
+            {
+                writer = new StreamWriter(fileName);
+                for (int i = 0; i < Count; i++)
+                {
+                    Animal animal = GetAt(i);
+                    // General fields 
+                    writer.WriteLine(animal.Id);
+                    writer.WriteLine(animal.Name);
+                    writer.WriteLine(animal.Age);
+                    writer.WriteLine(animal.Weight);
+                    writer.WriteLine(animal.Gender);
+                    writer.WriteLine(animal.Category);
 
-        //            // Category-specific fields 
-        //            if (animal is Mammal mammal)
-        //            {
-        //                writer.WriteLine(mammal.NumberOfTeeth);
-        //                writer.WriteLine(mammal.TailLength);
-        //            }
-        //            else if (animal is Reptile reptile)
-        //            {
-        //                writer.WriteLine(reptile.BodyLength);
-        //                writer.WriteLine(reptile.LivesInWater);
-        //                writer.WriteLine(reptile.AggressivenessLevel);
-        //            }
+                    // Category-specific fields 
+                    if (animal is Mammal mammal)
+                    {
+                        writer.WriteLine(mammal.NumberOfTeeth);
+                        writer.WriteLine(mammal.TailLength);
+                    }
+                    else if (animal is Reptile reptile)
+                    {
+                        writer.WriteLine(reptile.BodyLength);
+                        writer.WriteLine(reptile.LivesInWater);
+                        writer.WriteLine(reptile.AggressivenessLevel);
+                    }
 
-        //            // Species-specific fields 
-        //            if (animal is Dog dog)
-        //            {
-        //                writer.WriteLine(dog.Breed);
-        //                writer.WriteLine(dog.IsTrained);
-        //            }
-        //            else if (animal is Snake snake)
-        //            {
-        //                writer.WriteLine(snake.IsVenomous);
-        //                writer.WriteLine(snake.Speed);
-        //            }
+                    // Species-specific fields 
+                    if (animal is Dog dog)
+                    {
+                        writer.WriteLine(dog.Breed);
+                        writer.WriteLine(dog.IsTrained);
+                    }
+                    else if (animal is Snake snake)
+                    {
+                        writer.WriteLine(snake.IsVenomous);
+                        writer.WriteLine(snake.Speed);
+                    }
 
-        //            // Blank line separates each animal block.
-        //            writer.WriteLine();
-        //        }
-        //        return true;
-        //    }
-        //    finally
-        //    {
-        //        writer?.Close();
-        //    }
-        //}
+                    // Blank line separates each animal block.
+                    writer.WriteLine();
+                }
+                return true;
+            }
+            finally
+            {
+                writer?.Close();
+            }
+        }
 
         // Reconstructs the animal list from a plain text file written by SaveToTextFile.
         public override bool LoadFromTextFile(string fileName)
@@ -353,6 +353,61 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
         {
             return from i in Enumerable.Range(0, Count)
                    select GetAt(i);
+        }
+
+        // Populates the manager with test animals for development and UI testing.
+        // For testing only  and to be removed from InitializeGUI before final submission incase i forget @ Farid
+        public void SeedTestData()
+        {
+            Dog simba = new Dog(30, 0.8);
+            simba.Name = "Simba";
+            simba.Age = 4;
+            simba.Weight = 190.5;
+            simba.Gender = GenderType.Male;
+            simba.Breed = "Labrador";
+            simba.IsTrained = true;
+            SetNewID(simba);
+            Add(simba);
+
+            Dog bella = new Dog(28, 0.6);
+            bella.Name = "Bella";
+            bella.Age = 2;
+            bella.Weight = 160.0;
+            bella.Gender = GenderType.Female;
+            bella.Breed = "Poodle";
+            bella.IsTrained = false;
+            SetNewID(bella);
+            Add(bella);
+
+            Snake rex = new Snake(1.8, false, 6);
+            rex.Name = "Rex";
+            rex.Age = 7;
+            rex.Weight = 0.0;
+            rex.Gender = GenderType.Male;
+            rex.IsVenomous = false;
+            rex.Speed = 12.5;
+            SetNewID(rex);
+            Add(rex);
+
+            Snake naja = new Snake(1.2, true, 8);
+            naja.Name = "Naja";
+            naja.Age = 3;
+            naja.Weight = 0.0;
+            naja.Gender = GenderType.Female;
+            naja.IsVenomous = true;
+            naja.Speed = 9.0;
+            SetNewID(naja);
+            Add(naja);
+
+            Dog bruno = new Dog(32, 0.9);
+            bruno.Name = "Bruno";
+            bruno.Age = 5;
+            bruno.Weight = 200.0;
+            bruno.Gender = GenderType.Male;
+            bruno.Breed = "GermanShepherd";
+            bruno.IsTrained = true;
+            SetNewID(bruno);
+            Add(bruno);
         }
     }
 }

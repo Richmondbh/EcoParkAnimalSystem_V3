@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfAnimal xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<Animal xsi:type="Dog">
+		<Id>M1</Id>
+		<Name>Simba</Name>
+		<Age>4</Age>
+		<Weight>190.5</Weight>
+		<Gender>Male</Gender>
+		<Category>Mammal</Category>
+		<ImagePath></ImagePath>
+		<NumberOfTeeth>30</NumberOfTeeth>
+		<TailLength>0.8</TailLength>
+		<Breed>Labrador</Breed>
+		<IsTrained>true</IsTrained>
+	</Animal>
+	<Animal xsi:type="Dog">
+		<Id>M2</Id>
+		<Name>Bellaq</Name>
+		<Age>2</Age>
+		<Weight>160.0</Weight>
+		<Gender>Female</Gender>
+		<Category>Mammal</Category>
+		<ImagePath></ImagePath>
+		<NumberOfTeeth>28</NumberOfTeeth>
+		<TailLength>0.6</TailLength>
+		<Breed>Poodle</Breed>
+		<IsTrained>false</IsTrained>
+	</Animal>
+	<Animal xsi:type="Snake">
+		<Id>R1</Id>
+		<Name>Rex</Name>
+		<Age>7</Age>
+		<Weight>0.0</Weight>
+		<Gender>Male</Gender>
+		<Category>Reptile</Category>
+		<ImagePath></ImagePath>
+		<BodyLength>1.8</BodyLength>
+		<LivesInWater>false</LivesInWater>
+		<AggressivenessLevel>6</AggressivenessLevel>
+		<IsVenomous>false</IsVenomous>
+		<Speed>12.5</Speed>
+	</Animal>
+	<Animal xsi:type="Snake">
+		<Id>R2</Id>
+		<Name>Naja</Name>
+		<Age>3</Age>
+		<Weight>0.0</Weight>
+		<Gender>Female</Gender>
+		<Category>Reptile</Category>
+		<ImagePath></ImagePath>
+		<BodyLength>1.2</BodyLength>
+		<LivesInWater>true</LivesInWater>
+		<AggressivenessLevel>8</AggressivenessLevel>
+		<IsVenomous>true</IsVenomous>
+		<Speed>9.0</Speed>
+	</Animal>
+	<Animal xsi:type="Dog">
+		<Id>M3</Id>
+		<Name>Popo</Name>
+		<Age>5</Age>
+		<Weight>200.0</Weight>
+		<Gender>Male</Gender>
+		<Category>Mammal</Category>
+		<ImagePath></ImagePath>
+		<NumberOfTeeth>32</NumberOfTeeth>
+		<TailLength>0.9</TailLength>
+		<Breed>GermanShepherd</Breed>
+		<IsTrained>true</IsTrained>
+	</Animal>
+</ArrayOfAnimal>
