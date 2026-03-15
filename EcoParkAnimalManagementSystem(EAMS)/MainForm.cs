@@ -4,6 +4,8 @@ using EcoParkAnimalManagementSystem_EAMS_.Infrastructure;
 using EcoParkAnimalManagementSystem_EAMS_.Mammals;
 using EcoParkAnimalManagementSystem_EAMS_.Reptiles;
 using EcoParkAnimalManagementSystem_EAMS_.Utilities;
+using System.IO;
+using static System.Windows.Forms.DataFormats;
 
 namespace EcoParkAnimalManagementSystem_EAMS_
 {
@@ -15,6 +17,9 @@ namespace EcoParkAnimalManagementSystem_EAMS_
         private Animal currentAnimal = null;
         private string selectedImagePath = string.Empty;
 
+        // Tracks the current file path and format across save/load operations.
+        private string currentFilePath = string.Empty;
+        private string currentFileFormat = string.Empty;
 
         public MainForm()
         {
@@ -41,6 +46,12 @@ namespace EcoParkAnimalManagementSystem_EAMS_
                 cmbGender.Items.Add(gender);
             }
             cmbGender.SelectedIndex = 0;
+
+            // Populate category filter combobox for LINQ queries.
+            cmbCategory.Items.Clear();
+            foreach (CategoryType category in Enum.GetValues(typeof(CategoryType)))
+                cmbCategory.Items.Add(category);
+            cmbCategory.SelectedIndex = 0;
 
             // Clear inputs and output
             ClearInputFields();
@@ -347,6 +358,8 @@ namespace EcoParkAnimalManagementSystem_EAMS_
             {
                 lstAnimals.Items.Add(summary);
             }
+
+            UpdateStats();
         }
 
 
@@ -454,6 +467,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_
 
         }
 
+        // Help method for reading Animal data for edit
         private bool ReadGeneralAnimalDataForEdit(Animal animal)
         {
             if (string.IsNullOrWhiteSpace(txtName.Text))
@@ -515,72 +529,240 @@ namespace EcoParkAnimalManagementSystem_EAMS_
 
         }
 
-        private void exitToolStripMenuItem1_Click(object sender, EventArgs e)
+        /// <summary>
+        ///  File menu handlers 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+
+
+        private void mnuExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void mnuAbout_Click(object sender, EventArgs e)
         {
             MessageBox.Show("EcoPark Animal Management System\nVersion 1.0\n\n By: Richmond Boakye",
                 "About", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void txtAnimalDetails_TextChanged(object sender, EventArgs e)
-        {
 
-        }
-
-        private void btnSortByAge_Clicked(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnSortByName_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnFilterCategory_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnFilterAge_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void btnSortByAge_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        // Resets the application with prompts if data exists.
         private void mnuFileNew_Click(object sender, EventArgs e)
         {
+            if (animalManager.Count > 0)
+            {
+                DialogResult result = MessageBox.Show(
+                    "Unsaved animals will be lost. Continue?",
+                    "New — EcoPark", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.No)
+                    return;
+            }
+
+            animalManager.DeleteAll();
+            currentFilePath = string.Empty;
+            currentFileFormat = string.Empty;
+            UpdateAnimalListDisplay();
+            txtAnimalDetails.Text = string.Empty;
+            picAnimal.Image = null;
 
         }
-
+        // Saves using the remembered path and format  falls back to Save As if none set
         private void mnuFileSave_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(currentFilePath))
+            {
+                mnuFileSaveAs_Click(sender, e);
+                return;
+            }
 
+            SaveToCurrentFile();
         }
 
-        private void mnuFileOpen_Click(object sender, EventArgs e)
-        {
 
-        }
-
+        // Lets the user choose a path and format, then saves.
         private void mnuFileSaveAs_Click(object sender, EventArgs e)
         {
+            using (SaveFileDialog dialog = new SaveFileDialog())
+            {
+                dialog.Title = "Save Animal File";
+                dialog.InitialDirectory = Application.StartupPath;
+                dialog.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json|XML files (*.xml)|*.xml";
+
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                currentFilePath = dialog.FileName;
+                currentFileFormat = Path.GetExtension(dialog.FileName).TrimStart('.').ToLower();
+                SaveToCurrentFile();
+            }
+        }
+
+        // Opens a txt or json file and loads animals into the manager.
+        private void mnuFileOpen_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Title = "Open Animal File";
+                dialog.InitialDirectory = Application.StartupPath;
+                dialog.Filter = "Text files (*.txt)|*.txt|JSON files (*.json)|*.json";
+
+                if (dialog.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string path = dialog.FileName;
+                string format = Path.GetExtension(path).TrimStart('.').ToLower();
+
+                try
+                {
+                    if (format == "txt")
+                        animalManager.LoadFromTextFile(path);
+                    else if (format == "json")
+                        animalManager.JsonDeserialize(path);
+
+                    currentFilePath = path;
+                    currentFileFormat = format;
+                    UpdateAnimalListDisplay();
+                }
+                catch (FileNotFoundException ex)
+                {
+                    //   all exceptions caught and displayed only in the GUI layer.
+                    MessageBox.Show(ex.ToString(), "File not found",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (FormatException ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Invalid file format",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.ToString(), "Error opening file",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
 
         }
 
+        // Runs duplicate validation then writes in the current format.
+        private void SaveToCurrentFile()
+        {
+            try
+            {
+                // validate before every save.
+                animalManager.ValidateNoDuplicates();
 
+                if (currentFileFormat == "txt")
+                    animalManager.SaveToTextFile(currentFilePath);
+                else if (currentFileFormat == "json")
+                    animalManager.JsonSerialize(currentFilePath);
+                else if (currentFileFormat == "xml")
+                    animalManager.XmlSerialize(currentFilePath);
+
+                MessageBox.Show("File saved successfully.", "Save — EcoPark",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (AnimalValidationException ex)
+            {
+                // Custom exception carries animal name and species.
+                MessageBox.Show(ex.ToString(), "Duplicate detected",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            catch (IOException ex)
+            {
+                MessageBox.Show(ex.ToString(), "Error saving file",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Unexpected error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Populates lstQueryResults with animals sorted by age, youngest first.
+        private void btnSortByAge_Clicked(object sender, EventArgs e)
+        {
+            lstQueryResults.Items.Clear();
+            foreach (Animal animal in animalManager.GetSortedByAge())
+                lstQueryResults.Items.Add(animal.ToStringSummary());
+        }
+
+        // Populates lstQueryResults with animals sorted alphabetically by name.
+        private void btnSortByName_Click(object sender, EventArgs e)
+        {
+            lstQueryResults.Items.Clear();
+            foreach (Animal animal in animalManager.GetSortedByName())
+                lstQueryResults.Items.Add(animal.ToStringSummary());
+        }
+
+        // Filters lstQueryResults by the category selected in cmbCategory.
+        private void btnFilterCategory_Click(object sender, EventArgs e)
+        {
+            int index = cmbCategory.SelectedIndex;
+            if (index < 0) return;
+
+            CategoryType selected = (CategoryType)cmbCategory.SelectedItem;
+            lstQueryResults.Items.Clear();
+
+            foreach (Animal animal in animalManager.GetByCategory(selected))
+                lstQueryResults.Items.Add(animal.ToStringSummary());
+
+            if (lstQueryResults.Items.Count == 0)
+                lstQueryResults.Items.Add("No animals found in this category.");
+
+        }
+
+        // Filters lstQueryResults by the age range set in nudMinAge and nudMaxAge.
+        private void btnFilterAge_Click(object sender, EventArgs e)
+        {
+            int minAge = (int)nudMinAge.Value;
+            int maxAge = (int)nudMaxAge.Value;
+
+            lstQueryResults.Items.Clear();
+            foreach (Animal animal in animalManager.GetByAgeRange(minAge, maxAge))
+                lstQueryResults.Items.Add(animal.ToStringSummary());
+
+            if (lstQueryResults.Items.Count == 0)
+                lstQueryResults.Items.Add($"No animals found between age {minAge} and {maxAge}.");
+
+        }
+
+        // Searches by name or ID and shows the first match, or a notfound message.
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            string query = txtSearch.Text.Trim();
+            if (string.IsNullOrEmpty(query)) return;
+
+            lstQueryResults.Items.Clear();
+
+            // Try name first, fall back to ID.
+            Animal result = animalManager.SearchByName(query)
+                         ?? animalManager.SearchById(query);
+
+            if (result != null)
+                lstQueryResults.Items.Add(result.ToStringSummary());
+            else
+                lstQueryResults.Items.Add($"No animal found matching '{query}'.");
+
+        }
+
+        // Updates the stats labels with current total count and average age.
+        private void UpdateStats()
+        {
+            lblTotalCount.Text = $"Total: {animalManager.GetTotalCount()}";
+            lblAverageAge.Text = $"Avg age: {animalManager.GetAverageAge():F1} yrs";
+        }
+
+        // Populates lstQueryResults with animals sorted by age, youngest first.
+        private void btnSortByAge_Click(object sender, EventArgs e)
+        {
+            lstQueryResults.Items.Clear();
+            foreach (Animal animal in animalManager.GetSortedByAge())
+                lstQueryResults.Items.Add(animal.ToStringSummary());
+
+        }
     }
 }

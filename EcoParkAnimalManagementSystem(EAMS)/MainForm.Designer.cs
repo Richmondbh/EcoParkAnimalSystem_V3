@@ -33,13 +33,13 @@
             toolStripMenuItem3 = new ToolStripMenuItem();
             toolStripMenuItem4 = new ToolStripMenuItem();
             fileToolStripMenuItem = new ToolStripMenuItem();
-            exitToolStripMenuItem1 = new ToolStripMenuItem();
+            mnuExit = new ToolStripMenuItem();
             mnuFileNew = new ToolStripMenuItem();
             mnuFileSave = new ToolStripMenuItem();
             mnuFileOpen = new ToolStripMenuItem();
             mnuFileSaveAs = new ToolStripMenuItem();
             helpToolStripMenuItem1 = new ToolStripMenuItem();
-            aboutToolStripMenuItem = new ToolStripMenuItem();
+            mnuAbout = new ToolStripMenuItem();
             grpCreateAnimal = new GroupBox();
             btnCreateAnimal = new Button();
             chkListAllSpecies = new CheckBox();
@@ -72,7 +72,7 @@
             btnSortByAge = new Button();
             btnSortByName = new Button();
             lblAverageAge = new Label();
-            label1 = new Label();
+            lblTotalCount = new Label();
             menuStrip.SuspendLayout();
             grpCreateAnimal.SuspendLayout();
             grpGeneralData.SuspendLayout();
@@ -93,7 +93,6 @@
             txtAnimalDetails.Size = new Size(494, 441);
             txtAnimalDetails.TabIndex = 8;
             txtAnimalDetails.WordWrap = false;
-            txtAnimalDetails.TextChanged += txtAnimalDetails_TextChanged;
             // 
             // menuStrip
             // 
@@ -117,59 +116,59 @@
             // 
             // fileToolStripMenuItem
             // 
-            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { exitToolStripMenuItem1, mnuFileNew, mnuFileSave, mnuFileOpen, mnuFileSaveAs });
+            fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mnuExit, mnuFileNew, mnuFileSave, mnuFileOpen, mnuFileSaveAs });
             fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             fileToolStripMenuItem.Size = new Size(46, 24);
             fileToolStripMenuItem.Text = "File";
             // 
-            // exitToolStripMenuItem1
+            // mnuExit
             // 
-            exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-            exitToolStripMenuItem1.Size = new Size(224, 26);
-            exitToolStripMenuItem1.Text = "Exit";
-            exitToolStripMenuItem1.Click += exitToolStripMenuItem1_Click;
+            mnuExit.Name = "mnuExit";
+            mnuExit.Size = new Size(143, 26);
+            mnuExit.Text = "Exit";
+            mnuExit.Click += mnuExit_Click;
             // 
             // mnuFileNew
             // 
             mnuFileNew.Name = "mnuFileNew";
-            mnuFileNew.Size = new Size(224, 26);
+            mnuFileNew.Size = new Size(143, 26);
             mnuFileNew.Text = "New";
             mnuFileNew.Click += mnuFileNew_Click;
             // 
             // mnuFileSave
             // 
             mnuFileSave.Name = "mnuFileSave";
-            mnuFileSave.Size = new Size(224, 26);
+            mnuFileSave.Size = new Size(143, 26);
             mnuFileSave.Text = "Save";
             mnuFileSave.Click += mnuFileSave_Click;
             // 
             // mnuFileOpen
             // 
             mnuFileOpen.Name = "mnuFileOpen";
-            mnuFileOpen.Size = new Size(224, 26);
+            mnuFileOpen.Size = new Size(143, 26);
             mnuFileOpen.Text = "Open";
             mnuFileOpen.Click += mnuFileOpen_Click;
             // 
             // mnuFileSaveAs
             // 
             mnuFileSaveAs.Name = "mnuFileSaveAs";
-            mnuFileSaveAs.Size = new Size(224, 26);
+            mnuFileSaveAs.Size = new Size(143, 26);
             mnuFileSaveAs.Text = "Save As";
             mnuFileSaveAs.Click += mnuFileSaveAs_Click;
             // 
             // helpToolStripMenuItem1
             // 
-            helpToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            helpToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { mnuAbout });
             helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
             helpToolStripMenuItem1.Size = new Size(55, 24);
             helpToolStripMenuItem1.Text = "Help";
             // 
-            // aboutToolStripMenuItem
+            // mnuAbout
             // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(133, 26);
-            aboutToolStripMenuItem.Text = "About";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            mnuAbout.Name = "mnuAbout";
+            mnuAbout.Size = new Size(224, 26);
+            mnuAbout.Text = "About";
+            mnuAbout.Click += mnuAbout_Click;
             // 
             // grpCreateAnimal
             // 
@@ -389,7 +388,7 @@
             groupBox1.Controls.Add(btnSortByAge);
             groupBox1.Controls.Add(btnSortByName);
             groupBox1.Controls.Add(lblAverageAge);
-            groupBox1.Controls.Add(label1);
+            groupBox1.Controls.Add(lblTotalCount);
             groupBox1.Location = new Point(1067, 35);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(408, 810);
@@ -488,14 +487,14 @@
             lblAverageAge.TabIndex = 1;
             lblAverageAge.Text = "Avg age: 0.0 yrs";
             // 
-            // label1
+            // lblTotalCount
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(33, 47);
-            label1.Name = "label1";
-            label1.Size = new Size(57, 20);
-            label1.TabIndex = 0;
-            label1.Text = "Total: 0";
+            lblTotalCount.AutoSize = true;
+            lblTotalCount.Location = new Point(33, 47);
+            lblTotalCount.Name = "lblTotalCount";
+            lblTotalCount.Size = new Size(57, 20);
+            lblTotalCount.TabIndex = 0;
+            lblTotalCount.Text = "Total: 0";
             // 
             // MainForm
             // 
@@ -538,9 +537,9 @@
 
         private MenuStrip menuStrip;
         private ToolStripMenuItem fileToolStripMenuItem;
-        private ToolStripMenuItem exitToolStripMenuItem1;
+        private ToolStripMenuItem mnuExit;
         private ToolStripMenuItem helpToolStripMenuItem1;
-        private ToolStripMenuItem aboutToolStripMenuItem;
+        private ToolStripMenuItem mnuAbout;
         private GroupBox grpCreateAnimal;
         private ListBox lstSpecies;
         private ListBox lstCategory;
@@ -570,7 +569,7 @@
         private ToolStripMenuItem mnuFileOpen;
         private ToolStripMenuItem mnuFileSaveAs;
         private GroupBox groupBox1;
-        private Label label1;
+        private Label lblTotalCount;
         private Button btnSortByAge;
         private Button btnSortByName;
         private Label lblAverageAge;
