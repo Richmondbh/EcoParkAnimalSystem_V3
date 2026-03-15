@@ -7,12 +7,13 @@ using EcoParkAnimalManagementSystem_EAMS_.Reptiles;
 using EcoParkAnimalManagementSystem_EAMS_.Reptiles.Species;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
-using System.Text.Json;
 
 namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
 {
@@ -140,11 +141,12 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                 for (int i = 0; i < Count; i++)
                 {
                     Animal animal = GetAt(i);
+                    // Changed every Parse line in LoadFromTextFile to use InvariantCulture beacause of my keyboard setup
                     // General fields 
                     writer.WriteLine(animal.Id);
                     writer.WriteLine(animal.Name);
                     writer.WriteLine(animal.Age);
-                    writer.WriteLine(animal.Weight);
+                    writer.WriteLine(animal.Weight.ToString(CultureInfo.InvariantCulture));
                     writer.WriteLine(animal.Gender);
                     writer.WriteLine(animal.Category);
 
@@ -152,7 +154,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                     if (animal is Mammal mammal)
                     {
                         writer.WriteLine(mammal.NumberOfTeeth);
-                        writer.WriteLine(mammal.TailLength);
+                        writer.WriteLine(mammal.TailLength.ToString(CultureInfo.InvariantCulture));
                     }
                     else if (animal is Reptile reptile)
                     {
@@ -170,7 +172,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                     else if (animal is Snake snake)
                     {
                         writer.WriteLine(snake.IsVenomous);
-                        writer.WriteLine(snake.Speed);
+                        writer.WriteLine(snake.Speed.ToString(CultureInfo.InvariantCulture));
                     }
 
                     // Blank line separates each animal block.
@@ -199,11 +201,12 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                         if (string.IsNullOrWhiteSpace(line))
                             continue;
 
-                        // Read general fields — same order as SaveToTextFile.
+                        // Changed every Parse line in LoadFromTextFile to use InvariantCulture beacause of my keyboard setup
+                        // Read general fields. same order as SaveToTextFile.
                         string id = line;
                         string name = reader.ReadLine();
-                        int age = int.Parse(reader.ReadLine());
-                        double weight = double.Parse(reader.ReadLine());
+                        int age = int.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
+                        double weight = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
                         GenderType gender = (GenderType)Enum.Parse(typeof(GenderType), reader.ReadLine());
                         CategoryType category = (CategoryType)Enum.Parse(typeof(CategoryType), reader.ReadLine());
 
@@ -213,7 +216,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                         if (category == CategoryType.Mammal)
                         {
                             int numberOfTeeth = int.Parse(reader.ReadLine());
-                            double tailLength = double.Parse(reader.ReadLine());
+                            double tailLength = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
 
                             // Default to Dog for mammals 
                             Dog dog = new Dog(numberOfTeeth, tailLength);
@@ -223,13 +226,13 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                         }
                         else if (category == CategoryType.Reptile)
                         {
-                            double bodyLength = double.Parse(reader.ReadLine());
+                            double bodyLength = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
                             bool livesInWater = bool.Parse(reader.ReadLine());
                             int aggressivenessLevel = int.Parse(reader.ReadLine());
 
                             Snake snake = new Snake(bodyLength, livesInWater, aggressivenessLevel);
                             snake.IsVenomous = bool.Parse(reader.ReadLine());
-                            snake.Speed = double.Parse(reader.ReadLine());
+                            snake.Speed = double.Parse(reader.ReadLine(), CultureInfo.InvariantCulture);
                             animal = snake;
                         }
 

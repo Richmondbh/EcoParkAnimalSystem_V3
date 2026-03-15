@@ -1,7 +1,10 @@
 ﻿using EcoParkAnimalManagementSystem_EAMS_.Interfaces;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -162,12 +165,16 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
             }
         }
 
-        // Serializes the list to a JSON file using System.Text.Json.
-        public bool JsonSerialize(string fileName)
+        // Serializes the list to a JSON file with help of TypeNameHandling.Auto
+        public virtual bool JsonSerialize(string fileName)
         {
-            JsonSerializerOptions options = new JsonSerializerOptions { WriteIndented = true };
-            string json = JsonSerializer.Serialize(list, options);
-            // using guarantees the file is closed even if an exception is thrown.
+            JsonSerializerSettings settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+                Converters = new List<JsonConverter> { new StringEnumConverter() }
+            };
+            string json = JsonConvert.SerializeObject(list, settings);
             using (StreamWriter writer = new StreamWriter(fileName))
             {
                 writer.Write(json);
@@ -175,18 +182,19 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
             return true;
         }
 
-        // Deserializes the list from a JSON file.
+        // Deserializes the list from a JSON file with help of TypeNameHandling.Auto
         // Clears the existing list before loading.
         public bool JsonDeserialize(string fileName)
         {
             using (StreamReader reader = new StreamReader(fileName))
             {
                 string json = reader.ReadToEnd();
-                JsonSerializerOptions options = new JsonSerializerOptions
+                JsonSerializerSettings settings = new JsonSerializerSettings
                 {
-                    PropertyNameCaseInsensitive = true
+                    TypeNameHandling = TypeNameHandling.Auto,
+                     Converters = new List<JsonConverter> { new StringEnumConverter() }
                 };
-                List<T> loaded = JsonSerializer.Deserialize<List<T>>(json, options);
+                List<T> loaded = JsonConvert.DeserializeObject<List<T>>(json, settings);
                 if (loaded == null)
                     return false;
 

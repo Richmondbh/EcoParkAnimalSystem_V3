@@ -1,10 +1,13 @@
-﻿using EcoParkAnimalManagementSystem_EAMS_.Interfaces; 
+﻿using EcoParkAnimalManagementSystem_EAMS_.Interfaces;
+using EcoParkAnimalManagementSystem_EAMS_.Mammals.Species;
+using EcoParkAnimalManagementSystem_EAMS_.Reptiles.Species;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 
 namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
@@ -12,7 +15,10 @@ namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
     // Í removed abstract base class for all animals in the EcoPark system.
     //so JsonSerializer can instantiate this class directly.
 
-
+    [XmlInclude(typeof(Dog))]
+    [XmlInclude(typeof(Cat))]
+    [XmlInclude(typeof(Snake))]
+    [XmlInclude(typeof(Turtle))]
     public class Animal: IAnimal
     {
 
@@ -25,7 +31,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
         public string Name { get; set; } = "Unknown";
         public GenderType Gender { get; set; } = GenderType.Unknown;
         public string ImagePath { get; set; } = string.Empty;
-        public CategoryType Category { get; protected set; }
+        public CategoryType Category { get; set; }
 
 
         public int Age
@@ -56,7 +62,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
         public int SleepTimeHours
         {
             get { return sleepTimeHours; }
-            protected set
+             set
             {
                 if (value >= 0 && value <= 24)
                 {
@@ -82,6 +88,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.AnimalGen
             Age = age;
             Gender = gender;
         }
+   
 
         public virtual void SetSleepTime()
         {
