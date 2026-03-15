@@ -36,7 +36,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Interfaces
         // Gets the daily food requirements for this animal as a dictionary.
         Dictionary<string, string> DailyFoodRequirement();
 
-        /// Gets a queue of upcoming events for this animal.
+        // Gets a queue of upcoming events for this animal.
         Queue<string> GetUpcomingEvents();
     }
 }

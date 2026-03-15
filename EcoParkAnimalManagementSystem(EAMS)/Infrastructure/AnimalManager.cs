@@ -141,7 +141,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
                 for (int i = 0; i < Count; i++)
                 {
                     Animal animal = GetAt(i);
-                    // Changed every Parse line in LoadFromTextFile to use InvariantCulture beacause of my keyboard setup
+                    // Changed every Parse line in LoadFromTextFile to use InvariantCulture beacause of my keyboard setup 
                     // General fields 
                     writer.WriteLine(animal.Id);
                     writer.WriteLine(animal.Name);
