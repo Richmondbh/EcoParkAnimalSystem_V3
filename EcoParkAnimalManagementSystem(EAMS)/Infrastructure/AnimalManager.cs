@@ -212,7 +212,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
 
                         Animal animal = null;
 
-                        // Reconstruct the correct concrete type from the saved category.
+                        // Reconstructed the correct concrete type from the saved category.
                         if (category == CategoryType.Mammal)
                         {
                             int numberOfTeeth = int.Parse(reader.ReadLine());
@@ -312,7 +312,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
 
        
 
-        // Finds the first animal matching the given name (case-insensitive), or null.
+        // Finds the first animal matching the given name (case insensitive), or null.
         public Animal SearchByName(string name)
         {
             return (from animal in GetAllAnimals()

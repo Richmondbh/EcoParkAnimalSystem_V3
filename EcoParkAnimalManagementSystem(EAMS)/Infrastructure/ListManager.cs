@@ -171,7 +171,7 @@ namespace EcoParkAnimalManagementSystem_EAMS_.Infrastructure
             JsonSerializerSettings settings = new JsonSerializerSettings
             {
                 TypeNameHandling = TypeNameHandling.Auto,
-                Formatting = Newtonsoft.Json.Formatting.Indented,
+                Formatting = Formatting.Indented,
                 Converters = new List<JsonConverter> { new StringEnumConverter() }
             };
             string json = JsonConvert.SerializeObject(list, settings);
